@@ -3,7 +3,7 @@
  * @Author: scy
  * @Date: 2021-01-08 19:21:46
  * @LastEditors: WJM
- * @LastEditTime: 2021-03-23 11:41:00
+ * @LastEditTime: 2021-03-19 09:23:48
  */
 import { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/Index.vue'

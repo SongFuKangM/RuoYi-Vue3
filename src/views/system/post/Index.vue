@@ -282,14 +282,13 @@
 <script lang='ts'>
 
 // import { listPost, getPost, delPost, addPost, updatePost, exportPost, getDicts } from '@/apis/system'
-import { listPost, getDicts, updatePost, addPost, getPost, delPost } from '@/apis/system/system'
+import { listPost, getDicts, updatePost, addPost, getPost, delPost, exportPost } from '@/apis/system/system'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
-import { parseTime } from '@/utils/ruoyi'
+import { download, parseTime } from '@/utils/ruoyi'
 import pagination from '@/components/pagination/Index.vue'
+
 import { defineComponent, onMounted, reactive, toRefs, ref, unref } from 'vue'
-import axios from 'axios'
-import { getToken } from '@/utils/cookies'
-import { downloadfile } from '@/utils/file'
+
 export default defineComponent({
   components: {
     pagination
@@ -378,12 +377,15 @@ export default defineComponent({
       form.validate((valid: any) => {
         if (valid) {
           if (dataMap.formData.postId !== '') {
+            form.resetFields()
+
             updatePost(dataMap.formData).then(() => {
               ElMessage.success('修改成功')
               dataMap.open = false
               getList(dataMap.queryParams)
             })
           } else {
+            form.resetFields()
             addPost(dataMap.formData).then(() => {
               ElMessage.success('新增成功')
               dataMap.open = false
@@ -439,18 +441,9 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        axios({
-          url: process.env.VUE_APP_BASE_API + '/system/post/export', // 获取文件流的接口路径
-          method: 'post',
-          data: queryParams,
-          responseType: 'blob',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: getToken()
-          }
-        }).then((res: any) => {
-          downloadfile(res.data)
-        })
+        return exportPost(queryParams)
+      }).then((response) => {
+        download(response?.msg)
       })
     }
 

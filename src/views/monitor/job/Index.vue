@@ -480,15 +480,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs, ref, unref } from 'vue'
-import { listJob, getJob, delJob, addJob, updateJob, runJob, changeJobStatus } from '@/apis/monitor/job'
+import { listJob, getJob, delJob, addJob, updateJob, exportJob, runJob, changeJobStatus } from '@/apis/monitor/job'
 import { getDicts } from '@/apis/system/system'
 import pagination from '@/components/pagination/Index.vue'
 import { ElForm, ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { selectDictLabel, parseTime } from '@/utils/ruoyi'
-import axios from 'axios'
-import { getToken } from '@/utils/cookies'
-import { downloadfile } from '@/utils/file'
+import { download, selectDictLabel, parseTime } from '@/utils/ruoyi'
 export default defineComponent({
   components: {
     pagination
@@ -538,8 +535,8 @@ export default defineComponent({
         jobGroup: undefined,
         invokeTarget: undefined,
         cronExpression: undefined,
-        misfirePolicy: '1',
-        concurrent: '1',
+        misfirePolicy: 1,
+        concurrent: 1,
         status: '0'
       },
       // 表单校验
@@ -575,8 +572,8 @@ export default defineComponent({
         jobGroup: undefined,
         invokeTarget: undefined,
         cronExpression: undefined,
-        misfirePolicy: '1',
-        concurrent: '1',
+        misfirePolicy: 1,
+        concurrent: 1,
         status: '0'
       }
     }
@@ -714,18 +711,9 @@ export default defineComponent({
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        axios({
-          url: process.env.VUE_APP_BASE_API + '/job/job/export', // 获取文件流的接口路径
-          method: 'post',
-          data: dataMap.queryParams,
-          responseType: 'blob',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: getToken()
-          }
-        }).then((res: any) => {
-          downloadfile(res.data)
-        })
+        return exportJob(dataMap.queryParams)
+      }).then(response => {
+        download(response?.msg)
       })
     }
     onMounted(() => {
