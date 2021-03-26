@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Autor: WJM
+ * @Date: 2021-03-19 08:32:49
+ * @LastEditors: WJM
+ * @LastEditTime: 2021-03-26 10:18:49
+ */
 
 import { RootObject } from '@/model/rootObject'
 import https from '@/utils/https'
@@ -8,9 +15,9 @@ interface Treeselect{
   menus: []
 }
 export const roleMenuTreeselect = (roleId?: number | string) => {
-  return https().request<Treeselect>(`system/menu/roleMenuTreeselect/${roleId}`, Method.GET, undefined, ContentType.form)
+  return https.request<Treeselect>(`system/menu/roleMenuTreeselect/${roleId}`, Method.GET, undefined, ContentType.form)
 }
 
 export const treeselect = () => {
-  return https().request<RootObject<any>>('system/menu/treeselect', Method.GET, undefined, ContentType.form)
+  return https.request<RootObject<any>>('system/menu/treeselect', Method.GET, undefined, ContentType.form)
 }
