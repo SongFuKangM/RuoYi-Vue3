@@ -13,5 +13,5 @@ import { RootObject } from '@/model/rootObject'
 
 // 查询缓存详细
 export const getCache = () => {
-  return https.request<RootObject<CacheData>>('monitor/cache', Method.GET, undefined, ContentType.form)
+  return https.request<RootObject<CacheData>>('boss.monitor/cache', Method.GET, undefined, ContentType.form)
 }
