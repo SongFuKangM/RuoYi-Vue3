@@ -2,12 +2,12 @@
  * @Description: app actions
  * @Author: ZY
  * @Date: 2020-12-23 10:25:37
- * @LastEditors: ZY
- * @LastEditTime: 2021-02-23 20:38:59
+ * @LastEditors: WJM
+ * @LastEditTime: 2021-03-27 11:06:28
  */
 import { ActionTree, ActionContext } from 'vuex'
 import { RootState, useStore } from '@/store'
-import { state, UserState } from './state'
+import { UserState } from './state'
 import { Mutations } from './mutations'
 import { UserMutationTypes } from './mutation-types'
 import { UserActionTypes } from './action-types'
@@ -17,6 +17,7 @@ import { PermissionActionType } from '../permission/action-types'
 import router, { resetRouter } from '@/router'
 import { RouteRecordRaw } from 'vue-router'
 import { ElMessage } from 'element-plus'
+// import data from '@/views/pdf/content'
 const OK = 200
 type AugmentedActionContext = {
   commit<K extends keyof Mutations>(
@@ -74,9 +75,6 @@ export const actions: ActionTree<UserState, RootState> & Actions = {
   async [UserActionTypes.ACTION_GET_USER_INFO](
     { commit }: AugmentedActionContext
   ) {
-    if (state.token === '') {
-      throw Error('token is undefined!')
-    }
     await userInfoRequest().then((res) => {
       if (res?.code === OK) {
         commit(UserMutationTypes.SET_ROLES, res.roles)
